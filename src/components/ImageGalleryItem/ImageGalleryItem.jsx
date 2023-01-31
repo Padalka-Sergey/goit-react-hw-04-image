@@ -78,6 +78,7 @@ export function ImageGalleryItem({
     pageNorm = 1;
     statusFunc('pending');
     onFetchAPI(onFetchTotal, textForm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -91,6 +92,7 @@ export function ImageGalleryItem({
     pageNorm = 1;
 
     onFetchAPI(onFetchTotal, textForm);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [textForm]);
 
   useEffect(() => {
@@ -121,6 +123,7 @@ export function ImageGalleryItem({
         setError(error);
         statusFunc('rejected');
       });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 
   const data = localStorage.getItem('data');
