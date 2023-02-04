@@ -20,9 +20,9 @@ export function ImageGallery({ textForm }) {
       {textForm && (
         <ImageList>
           <ImageGalleryItem
-            onFetchTotal={data => setDataQty(data)}
+            onFetchTotal={setDataQty}
             textForm={textForm}
-            statusFunc={data => setStatus(data)}
+            statusFunc={setStatus}
             status={status}
             page={page}
           />

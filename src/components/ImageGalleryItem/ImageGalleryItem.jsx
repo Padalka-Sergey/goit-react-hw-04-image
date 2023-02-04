@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { GalleryItem, Img } from './ImageGalleryItem.styled';
 import { AddModal } from 'components/Modal/Modal';
 import fetchAPI from 'services/fetch-api';
@@ -18,8 +18,9 @@ export function ImageGalleryItem({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idImg, setIdImg] = useState(null);
 
-  const isFirstRender = useRef(true);
-  const isFirstRender2 = useRef(true);
+  const isFirstEffect = useRef(false);
+  const isSecondEffect = useRef(true);
+  const isFhirdEffect = useRef(true);
 
   const closeModal = evt => {
     const { tagName } = evt.target;
@@ -54,50 +55,53 @@ export function ImageGalleryItem({
     );
   };
 
-  const onFetchAPI = (total, nextText) => {
-    fetchAPI
-      .fetchApi(nextText, pageNorm)
-      .then(responseDataFetch => {
-        localStorage.setItem(
-          'data',
-          JSON.stringify(onResponseDataFetch(responseDataFetch))
-        );
-        setResponseData(onResponseDataFetch(responseDataFetch));
+  const onFetchAPI = useCallback(
+    (total, nextText) => {
+      statusFunc('pending');
+      pageNorm = 1;
+      fetchAPI
+        .fetchApi(nextText, pageNorm)
+        .then(responseDataFetch => {
+          localStorage.setItem(
+            'data',
+            JSON.stringify(onResponseDataFetch(responseDataFetch))
+          );
+          setResponseData(onResponseDataFetch(responseDataFetch));
 
-        total(responseDataFetch.total);
-        statusFunc('resolved');
-      })
-      .catch(error => {
-        setError(error);
-        statusFunc('rejected');
-      });
-  };
-
-  useEffect(() => {
-    localStorage.clear();
-    pageNorm = 1;
-    statusFunc('pending');
-    onFetchAPI(onFetchTotal, textForm);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+          total(responseDataFetch.total);
+          statusFunc('resolved');
+        })
+        .catch(error => {
+          setError(error);
+          statusFunc('rejected');
+        });
+    },
+    [statusFunc]
+  );
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
+    if (!isFirstEffect.current) {
+      localStorage.clear();
+      onFetchAPI(onFetchTotal, textForm);
+      isFirstEffect.current = true;
+    }
+  });
+
+  useEffect(() => {
+    if (isSecondEffect.current) {
+      console.log(isSecondEffect.current);
+      isSecondEffect.current = false;
       return;
     }
     localStorage.removeItem('data');
     setResponseData([]);
-    statusFunc('pending');
-    pageNorm = 1;
-
     onFetchAPI(onFetchTotal, textForm);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [textForm]);
+    isFhirdEffect.current = true;
+  }, [onFetchAPI, onFetchTotal, statusFunc, textForm]);
 
   useEffect(() => {
-    if (isFirstRender2.current) {
-      isFirstRender2.current = false;
+    if (isFhirdEffect.current) {
+      isFhirdEffect.current = false;
       return;
     }
     if (pageNorm === 1) {
@@ -123,8 +127,7 @@ export function ImageGalleryItem({
         setError(error);
         statusFunc('rejected');
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [page]);
+  }, [page, onFetchTotal, statusFunc, textForm]);
 
   const data = localStorage.getItem('data');
   const parsedData = JSON.parse(data);
