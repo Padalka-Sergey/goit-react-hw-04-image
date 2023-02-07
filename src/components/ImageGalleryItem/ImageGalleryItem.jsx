@@ -10,6 +10,7 @@ export function ImageGalleryItem({
   textForm,
   onFetchTotal,
   page,
+  setPage,
   statusFunc,
   status,
 }) {
@@ -89,24 +90,29 @@ export function ImageGalleryItem({
 
   useEffect(() => {
     if (isSecondEffect.current) {
-      console.log(isSecondEffect.current);
       isSecondEffect.current = false;
       return;
     }
+    setPage(1);
+    console.log(' Второй юз эффект');
     localStorage.removeItem('data');
     setResponseData([]);
     onFetchAPI(onFetchTotal, textForm);
     isFhirdEffect.current = true;
-  }, [onFetchAPI, onFetchTotal, statusFunc, textForm]);
+  }, [onFetchAPI, onFetchTotal, setPage, statusFunc, textForm]);
 
   useEffect(() => {
     if (isFhirdEffect.current) {
       isFhirdEffect.current = false;
       return;
     }
+    if (page === 1) {
+      return;
+    }
     if (pageNorm === 1) {
       pageNorm = 2;
     }
+    console.log(' Третий юз эффект');
     statusFunc('pending');
 
     fetchAPI

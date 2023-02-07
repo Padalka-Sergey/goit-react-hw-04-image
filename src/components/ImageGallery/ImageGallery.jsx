@@ -11,9 +11,33 @@ export function ImageGallery({ textForm }) {
   const [status, setStatus] = useState('idle');
   const [page, setPage] = useState(1);
 
+  // const isLoadingMore = useRef(true);
+  // console.log(isLoadingMore.current);
+  // let isLoading = true;
+
   const onClickBtn = () => {
     setPage(prevPage => prevPage + 1);
   };
+
+  // =================================================
+  console.log(dataQty);
+
+  // if (page * 12 - 12 >= dataQty) {
+  //   console.log(page * 12 - 12 >= dataQty);
+
+  //   isLoading = false;
+  // }
+  // if (isLoadingMore.current) {
+  //   isLoadingMore.current = false;
+  // }
+
+  // console.log(isLoading);
+
+  const value = page * 12 >= dataQty;
+  console.log('Буль если на странице больше', value);
+  console.log(page * 12);
+  console.log('страница', page);
+  // ======================================================
 
   return (
     <>
@@ -25,6 +49,7 @@ export function ImageGallery({ textForm }) {
             statusFunc={setStatus}
             status={status}
             page={page}
+            setPage={setPage}
           />
         </ImageList>
       )}
@@ -32,7 +57,7 @@ export function ImageGallery({ textForm }) {
       {dataQty === 0 && (
         <TitleVisoutImg>Картинки с именем {textForm} нет :(</TitleVisoutImg>
       )}
-      {dataQty > 0 && status !== 'pending' && (
+      {!value && dataQty > 0 && status !== 'pending' && (
         <Button onClickBtn={onClickBtn} />
       )}
     </>
