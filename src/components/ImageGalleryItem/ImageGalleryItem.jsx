@@ -42,11 +42,11 @@ export function ImageGalleryItem({
     setIdImg(evtTarget);
   };
 
-  const handleKeyDown = evt => {
-    if (evt.code === 'Escape') {
-      setIsModalOpen(false);
-    }
-  };
+  // const handleKeyDown = evt => {
+  //   if (evt.code === 'Escape') {
+  //     setIsModalOpen(false);
+  //   }
+  // };
 
   const onResponseDataFetch = responseDataFetch => {
     return responseDataFetch.hits.map(
@@ -94,7 +94,6 @@ export function ImageGalleryItem({
       return;
     }
     setPage(1);
-    console.log(' Второй юз эффект');
     localStorage.removeItem('data');
     setResponseData([]);
     onFetchAPI(onFetchTotal, textForm);
@@ -112,7 +111,6 @@ export function ImageGalleryItem({
     if (pageNorm === 1) {
       pageNorm = 2;
     }
-    console.log(' Третий юз эффект');
     statusFunc('pending');
 
     fetchAPI
@@ -154,7 +152,8 @@ export function ImageGalleryItem({
             tags={tags}
             largeImageURL={largeImageURL}
             onClose={closeModal}
-            onKeyDown={handleKeyDown}
+            // onKeyDown={handleKeyDown}
+            setIsModalOpen={setIsModalOpen}
           />
         )}
       </GalleryItem>
@@ -175,7 +174,7 @@ export function ImageGalleryItem({
                   tags={tags}
                   largeImageURL={largeImageURL}
                   onClose={closeModal}
-                  onKeyDown={handleKeyDown}
+                  // onKeyDown={handleKeyDown}
                 />
               )}
             </GalleryItem>

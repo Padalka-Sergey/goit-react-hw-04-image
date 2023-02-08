@@ -1,13 +1,17 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Btn, Input, Searhbar, BtnSpan } from './Searchbar.styled';
 
-export function SearchbarForm({ onSubmitProps }) {
-  const [textFormLetter, settextFormLetter] = useState('');
+export function SearchbarForm({
+  onSubmitProps,
+  setTextFormLetter,
+  textFormLetter,
+}) {
+  // const [textFormLetter, setTextFormLetter] = useState('');
 
   const handleTextFormChange = event => {
     const evtValue = event.currentTarget.value.toLowerCase();
-    settextFormLetter(evtValue);
+    setTextFormLetter(evtValue);
   };
 
   const handleSubmit = event => {

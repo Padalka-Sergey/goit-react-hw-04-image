@@ -1,15 +1,23 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { Overlay, Modal } from './Modal.styled';
 
-export function AddModal({ largeImageURL, tags, onClose, id, onKeyDown }) {
+export function AddModal({ largeImageURL, tags, onClose, id, setIsModalOpen }) {
+  const handleKeyDown = useCallback(
+    evt => {
+      if (evt.code === 'Escape') {
+        setIsModalOpen(false);
+      }
+    },
+    [setIsModalOpen]
+  );
   useEffect(() => {
-    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onKeyDown]);
+  }, [handleKeyDown]);
 
   return (
     <Overlay onClick={onClose}>
