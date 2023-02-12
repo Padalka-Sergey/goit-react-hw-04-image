@@ -8,7 +8,7 @@ let pageNorm;
 let response;
 export function ImageGalleryItem({
   textForm,
-  onFetchTotal,
+  setDataQty,
   page,
   setPage,
   statusFunc,
@@ -48,6 +48,23 @@ export function ImageGalleryItem({
   //   }
   // };
 
+  function markup(id, tags, webformatURL, largeImageURL) {
+    return (
+      <GalleryItem key={id}>
+        <Img id={id} alt={tags} src={webformatURL} onClick={openModal} />
+        {isModalOpen && id === idImg && (
+          <AddModal
+            id={id}
+            tags={tags}
+            largeImageURL={largeImageURL}
+            onClose={closeModal}
+            setIsModalOpen={setIsModalOpen}
+          />
+        )}
+      </GalleryItem>
+    );
+  }
+
   const onResponseDataFetch = responseDataFetch => {
     return responseDataFetch.hits.map(
       ({ id, webformatURL, tags, largeImageURL }) => {
@@ -77,13 +94,14 @@ export function ImageGalleryItem({
           statusFunc('rejected');
         });
     },
-    [statusFunc]
+    [setResponseData, statusFunc]
   );
 
   useEffect(() => {
     if (!isFirstEffect.current) {
       localStorage.clear();
-      onFetchAPI(onFetchTotal, textForm);
+
+      onFetchAPI(setDataQty, textForm);
       isFirstEffect.current = true;
     }
   });
@@ -95,10 +113,11 @@ export function ImageGalleryItem({
     }
     setPage(1);
     localStorage.removeItem('data');
+
     setResponseData([]);
-    onFetchAPI(onFetchTotal, textForm);
+    onFetchAPI(setDataQty, textForm);
     isFhirdEffect.current = true;
-  }, [onFetchAPI, onFetchTotal, setPage, statusFunc, textForm]);
+  }, [onFetchAPI, setDataQty, setPage, setResponseData, textForm]);
 
   useEffect(() => {
     if (isFhirdEffect.current) {
@@ -117,7 +136,7 @@ export function ImageGalleryItem({
       .fetchApi(textForm, pageNorm)
       .then(responseDataFetch => {
         setResponseData(responseDataFetch);
-        onFetchTotal(responseDataFetch.total);
+        setDataQty(responseDataFetch.total);
         statusFunc('resolved');
 
         const data = localStorage.getItem('data');
@@ -131,7 +150,7 @@ export function ImageGalleryItem({
         setError(error);
         statusFunc('rejected');
       });
-  }, [page, onFetchTotal, statusFunc, textForm]);
+  }, [page, setDataQty, statusFunc, textForm, setResponseData]);
 
   const data = localStorage.getItem('data');
   const parsedData = JSON.parse(data);
@@ -143,52 +162,72 @@ export function ImageGalleryItem({
   }
 
   if (parsedData) {
-    return parsedData.map(({ id, webformatURL, tags, largeImageURL }) => (
-      <GalleryItem key={id}>
-        <Img id={id} alt={tags} src={webformatURL} onClick={openModal} />
-        {isModalOpen && id === idImg && (
-          <AddModal
-            id={id}
-            tags={tags}
-            largeImageURL={largeImageURL}
-            onClose={closeModal}
-            // onKeyDown={handleKeyDown}
-            setIsModalOpen={setIsModalOpen}
-          />
-        )}
-      </GalleryItem>
-    ));
+    return parsedData.map(({ id, webformatURL, tags, largeImageURL }) =>
+      markup(id, tags, webformatURL, largeImageURL)
+    );
   }
 
   if (status === 'resolved') {
-    return (
-      <>
-        {responseData.map(({ id, webformatURL, tags, largeImageURL }) => {
-          return (
-            <GalleryItem key={id}>
-              <Img id={id} alt={tags} src={webformatURL} onClick={openModal} />
-
-              {isModalOpen && id === idImg && (
-                <AddModal
-                  id={id}
-                  tags={tags}
-                  largeImageURL={largeImageURL}
-                  onClose={closeModal}
-                  // onKeyDown={handleKeyDown}
-                />
-              )}
-            </GalleryItem>
-          );
-        })}
-      </>
+    return responseData.map(({ id, webformatURL, tags, largeImageURL }) =>
+      markup(id, tags, webformatURL, largeImageURL)
     );
   }
 }
 
 ImageGalleryItem.propTypes = {
   textForm: PropTypes.string.isRequired,
-  onFetchTotal: PropTypes.func.isRequired,
+  setDataQty: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
+  setPage: PropTypes.func.isRequired,
   statusFunc: PropTypes.func.isRequired,
   status: PropTypes.string.isRequired,
 };
+
+// if (parsedData) {
+//   return parsedData.map(({ id, webformatURL, tags, largeImageURL }) => (
+//     <GalleryItem key={id}>
+//       <Img id={id} alt={tags} src={webformatURL} onClick={openModal} />
+//       {isModalOpen && id === idImg && (
+//         <AddModal
+//           id={id}
+//           tags={tags}
+//           largeImageURL={largeImageURL}
+//           onClose={closeModal}
+//         />
+//       )}
+//     </GalleryItem>
+//   ));
+// }
+
+// if (status === 'resolved') {
+//   return responseData.map(({ id, webformatURL, tags, largeImageURL }) => {
+//     return (
+//       <GalleryItem key={id}>
+//         <Img id={id} alt={tags} src={webformatURL} onClick={openModal} />
+
+//         {isModalOpen && id === idImg && (
+//           <AddModal
+//             id={id}
+//             tags={tags}
+//             largeImageURL={largeImageURL}
+//             onClose={closeModal}
+//           />
+//         )}
+//       </GalleryItem>
+//     );
+//   });
+// }
+
+//  return (
+//    <GalleryItem>
+//      <Img id={id} alt={tags} src={webformatURL} onClick={openModal} />
+//      {isModalOpen && id === idImg && (
+//        <AddModal
+//          id={id}
+//          tags={tags}
+//          largeImageURL={largeImageURL}
+//          onClose={closeModal}
+//        />
+//      )}
+//    </GalleryItem>
+//  );

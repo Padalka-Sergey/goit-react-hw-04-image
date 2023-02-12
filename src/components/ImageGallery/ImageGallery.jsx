@@ -1,55 +1,100 @@
-import PropTypes from 'prop-types';
-// import { useState } from 'react';
+// import PropTypes from 'prop-types';
+
 import { ImageList } from './ImageGallery.styled';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
-import { TitleVisoutImg } from 'components/App/App.styled';
-import { Loader } from 'components/Loader/Loader';
-import { Button } from 'components/Button/Button';
 
-export function ImageGallery({
-  textForm,
-  dataQty,
-  setDataQty,
-  status,
-  setStatus,
-  page,
-  setPage,
-}) {
-  // const [dataQty, setDataQty] = useState(null);
-  // const [status, setStatus] = useState('idle');
-  // const [page, setPage] = useState(1);
-
-  const value = page * 12 >= dataQty;
-
-  const onClickBtn = () => {
-    setPage(prevPage => prevPage + 1);
-  };
-
+export function ImageGallery({ ...otherProps }) {
   return (
     <>
-      {textForm && (
-        <ImageList>
-          <ImageGalleryItem
-            onFetchTotal={setDataQty}
-            textForm={textForm}
-            statusFunc={setStatus}
-            status={status}
-            page={page}
-            setPage={setPage}
-          />
-        </ImageList>
-      )}
-      {status === 'pending' && <Loader />}
-      {!value && dataQty > 0 && status === 'resolved' && (
-        <Button onClickBtn={onClickBtn} />
-      )}
-      {dataQty === 0 && (
-        <TitleVisoutImg>Картинки с именем {textForm} нет :(</TitleVisoutImg>
-      )}
+      <ImageList>
+        <ImageGalleryItem {...otherProps} />
+      </ImageList>
     </>
   );
 }
 
-ImageGallery.propTypes = {
-  textForm: PropTypes.string.isRequired,
-};
+// ==================================
+//  <>
+//    <ImageList>
+//      {parsedData.map(({ id, webformatURL, tags, largeImageURL }) => (
+//        <ImageGalleryItem
+//          onFetchTotal={setDataQty}
+//          textForm={textForm}
+//          statusFunc={setStatus}
+//          status={status}
+//          page={page}
+//          setPage={setPage}
+//          setResponseData={setResponseData}
+//          responseData={responseData}
+//        />
+//      ))}
+//    </ImageList>
+//  </>;
+
+//  <ImageList>
+//         {parsedData &&
+//           parsedData.map(({ id, webformatURL, tags, largeImageURL }) => (
+//             <ImageGalleryItem
+//               key={id}
+//               onFetchTotal={setDataQty}
+//               textForm={textForm}
+//               statusFunc={setStatus}
+//               status={status}
+//               page={page}
+//               setPage={setPage}
+//               setResponseData={setResponseData}
+//               responseData={responseData}
+//               id={id}
+//               webformatURL={webformatURL}
+//               tags={tags}
+//               largeImageURL={largeImageURL}
+//             />
+//           ))}
+//         {status === 'resolved' &&
+//           responseData.map(({ id, webformatURL, tags, largeImageURL }) => (
+//             <ImageGalleryItem
+//               key={id}
+//               onFetchTotal={setDataQty}
+//               textForm={textForm}
+//               statusFunc={setStatus}
+//               status={status}
+//               page={page}
+//               setPage={setPage}
+//               setResponseData={setResponseData}
+//               responseData={responseData}
+//               id={id}
+//               webformatURL={webformatURL}
+//               tags={tags}
+//               largeImageURL={largeImageURL}
+//             />
+//           ))}
+//       </ImageList>
+//     </>
+//   );
+// }
+
+// export function ImageGallery({
+// textForm,
+// setDataQty,
+// status,
+// page,
+// setPage,
+// statusFunc,
+//   ...otherProps
+// }) {
+//   return (
+//     <>
+//       <ImageList>
+//         <ImageGalleryItem
+// onFetchTotal={setDataQty}
+// textForm={textForm}
+// status={status}
+// statusFunc={statusFunc}
+// page={page}
+// setPage={setPage}
+//           {...otherProps}
+//         />
+//       </ImageList>
+//     </>
+//   );
+// }

@@ -28,7 +28,7 @@ code {
 
 img {
   display: block;
-  /* max-width: 100%; */
-  width: 100px;
+  max-width: 100%;
+  /* width: 100px; */
   height: auto;
 }

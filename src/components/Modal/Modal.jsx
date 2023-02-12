@@ -32,6 +32,6 @@ AddModal.propTypes = {
   largeImageURL: PropTypes.string.isRequired,
   tags: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
-  onKeyDown: PropTypes.func.isRequired,
+  setIsModalOpen: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
 };

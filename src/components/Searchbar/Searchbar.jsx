@@ -1,30 +1,11 @@
-// import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Btn, Input, Searhbar, BtnSpan } from './Searchbar.styled';
 
 export function SearchbarForm({
-  onSubmitProps,
-  setTextFormLetter,
   textFormLetter,
+  handleTextFormChange,
+  handleSubmit,
 }) {
-  // const [textFormLetter, setTextFormLetter] = useState('');
-
-  const handleTextFormChange = event => {
-    const evtValue = event.currentTarget.value.toLowerCase();
-    setTextFormLetter(evtValue);
-  };
-
-  const handleSubmit = event => {
-    event.preventDefault();
-
-    if (textFormLetter.trim() === '') {
-      alert('Введите текст');
-      return;
-    }
-
-    onSubmitProps(textFormLetter);
-  };
-
   return (
     <Searhbar>
       <Form onSubmit={handleSubmit}>
@@ -46,5 +27,7 @@ export function SearchbarForm({
 }
 
 SearchbarForm.propTypes = {
-  onSubmitProps: PropTypes.func.isRequired,
+  handleTextFormChange: PropTypes.func.isRequired,
+  handleSubmit: PropTypes.func.isRequired,
+  textFormLetter: PropTypes.string.isRequired,
 };
