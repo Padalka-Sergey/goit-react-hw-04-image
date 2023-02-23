@@ -3,11 +3,33 @@
 import { ImageList } from './ImageGallery.styled';
 import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 
-export function ImageGallery({ ...otherProps }) {
+// export function ImageGallery({ ...otherProps }) {
+export function ImageGallery({
+  textForm,
+  setDataQty,
+  status,
+  statusFunc,
+  page,
+  setPage,
+  error,
+  responseData,
+  openModal,
+}) {
   return (
     <>
       <ImageList>
-        <ImageGalleryItem {...otherProps} />
+        {/* <ImageGalleryItem {...otherProps} /> */}
+        <ImageGalleryItem
+          textForm={textForm}
+          setDataQty={setDataQty}
+          status={status}
+          statusFunc={statusFunc}
+          page={page}
+          setPage={setPage}
+          error={error}
+          responseData={responseData}
+          openModal={openModal}
+        />
       </ImageList>
     </>
   );
