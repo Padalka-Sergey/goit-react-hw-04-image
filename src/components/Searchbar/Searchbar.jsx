@@ -2,7 +2,12 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { Form, Btn, Input, Searhbar, BtnSpan } from './Searchbar.styled';
 
-export function SearchbarForm({ setTextForm, setDataQty }) {
+export function SearchbarForm({
+  setTextForm,
+  setDataQty,
+  setPage,
+  setResponseData,
+}) {
   const [textFormLetter, setTextFormLetter] = useState('');
 
   const handleTextFormChange = event => {
@@ -20,6 +25,8 @@ export function SearchbarForm({ setTextForm, setDataQty }) {
 
     setTextForm(textFormLetter);
     setDataQty(null);
+    setPage(1);
+    setResponseData([]);
   };
 
   return (
@@ -43,9 +50,8 @@ export function SearchbarForm({ setTextForm, setDataQty }) {
 }
 
 SearchbarForm.propTypes = {
-  // handleTextFormChange: PropTypes.func.isRequired,
-  // handleSubmit: PropTypes.func.isRequired,
-  // textFormLetter: PropTypes.string.isRequired,
   setDataQty: PropTypes.func.isRequired,
   setTextForm: PropTypes.func.isRequired,
+  setPage: PropTypes.func.isRequired,
+  setResponseData: PropTypes.func.isRequired,
 };

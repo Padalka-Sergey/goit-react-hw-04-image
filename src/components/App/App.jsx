@@ -19,10 +19,6 @@ export function App() {
   const [idImg, setIdImg] = useState(null);
 
   const value = page * 12 >= dataQty;
-  // console.log(dataQty);
-  // console.log(page);
-  // console.log(textForm);
-  console.log(responseData);
 
   // =============================================
   // useEffect
@@ -36,18 +32,10 @@ export function App() {
     fetchAPI
       .fetchApi(textForm, page)
       .then(responseDataFetch => {
-        // console.log(responseDataFetch);
-        // localStorage.setItem(
-        //   'data',
-        //   JSON.stringify(onResponseDataFetch(responseDataFetch))
-        // );
-        // setResponseData(onResponseDataFetch(responseDataFetch));
         setResponseData(prevItems => [
           ...prevItems,
           ...onResponseDataFetch(responseDataFetch),
-          // ...responseDataFetch.hits,
         ]);
-        // console.log(responseData);
 
         setDataQty(responseDataFetch.total);
         setStatus('resolved');
@@ -56,14 +44,9 @@ export function App() {
         setError(error);
         setStatus('rejected');
       });
-    // .finally(statusFunc('resolve'));
-
-    // isFirstEffect.current = true;
-    // }
   }, [page, textForm]);
 
   const onResponseDataFetch = responseDataFetch => {
-    // console.log(responseDataFetch.hits);
     return responseDataFetch.hits.map(
       ({ id, webformatURL, tags, largeImageURL }) => {
         return { id, webformatURL, tags, largeImageURL };
@@ -97,24 +80,17 @@ export function App() {
     setIdImg(evtTarget);
   };
 
-  // const { id, webformatURL, tags, largeImageURL } = responseData;
-  // console.log(id);
-
   return (
     <AppContainer>
-      <SearchbarForm setTextForm={setTextForm} setDataQty={setDataQty} />
+      <SearchbarForm
+        setTextForm={setTextForm}
+        setDataQty={setDataQty}
+        setPage={setPage}
+        setResponseData={setResponseData}
+      />
       {textForm && dataQty !== 0 && (
-        <ImageGallery
-          textForm={textForm}
-          setDataQty={setDataQty}
-          status={status}
-          statusFunc={setStatus}
-          page={page}
-          setPage={setPage}
-          error={error}
-          responseData={responseData}
-          openModal={openModal}
-        />
+        // status === 'resolved' && ---- перерендериваются все картинки!!!!!!
+        <ImageGallery responseData={responseData} openModal={openModal} />
       )}
       {status === 'pending' && <Loader />}
       {!value && dataQty > 0 && status === 'resolved' && (
@@ -123,7 +99,7 @@ export function App() {
 
       {status === 'resolved' &&
         responseData.map(
-          ({ id, webformatURL, tags, largeImageURL }) =>
+          ({ id, tags, largeImageURL }) =>
             isModalOpen &&
             id === idImg && (
               <AddModal
