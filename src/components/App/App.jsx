@@ -80,14 +80,18 @@ export function App() {
     setIdImg(evtTarget);
   };
 
+  // SearchbarForm
+
+  const handleAppSubmit = searchText => {
+    setTextForm(searchText);
+    setDataQty(null);
+    setPage(1);
+    setResponseData([]);
+  };
+
   return (
     <AppContainer>
-      <SearchbarForm
-        setTextForm={setTextForm}
-        setDataQty={setDataQty}
-        setPage={setPage}
-        setResponseData={setResponseData}
-      />
+      <SearchbarForm onSubmitApp={handleAppSubmit} />
       {textForm && dataQty !== 0 && (
         // status === 'resolved' && ---- перерендериваются все картинки!!!!!!
         <ImageGallery responseData={responseData} openModal={openModal} />
